@@ -2,7 +2,7 @@
 <html lang="zh-TW" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AQUA 水瓶 | Premium Tea Boutique</title>
 
   <!-- === 社群分享預覽與廣告語設定 (Open Graph & Twitter Cards) === -->
@@ -12,9 +12,8 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="AQUA 水瓶 | Premium Tea Boutique 頂級精品茶飲">
   <meta property="og:description" content="It's Tea Time! 💧 AQUA 水瓶以匠心工藝重新定義現代茶飲。嚴選頂級原葉與時令鮮果，於曜石黑與淬金交錯的空間中，獻上一場無與倫比的味覺饗宴。">
-  <!-- 圖片路徑設定：請確保將「It's Tea Time!」海報命名為 og-image.jpg 並上傳 -->
   <meta property="og:image" content="og-image.jpg">
-  <meta property="og:url" content="https://shiu47.github.io/aqua-teashop/"> <!-- 這是從你截圖推測的 GitHub 網址 -->
+  <meta property="og:url" content="https://shiu47.github.io/aqua-teashop/">
 
   <!-- Twitter 分享設定 -->
   <meta name="twitter:card" content="summary_large_image">
@@ -53,14 +52,24 @@
   <style>
     ::selection { background: #d4af37; color: #000; }
 
+    /* 整體捲軸樣式 (電腦版) */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: #050505; }
     ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #d4af37; }
 
+    /* 隱藏水平滑動捲軸 (手機版 Tab 專用) */
+    .hide-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none; /* Chrome, Safari and Opera */
+    }
+
     /* Navbar */
     .nav-glass {
-      background: rgba(5, 5, 5, 0.92);
+      background: rgba(5, 5, 5, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(212, 175, 55, 0.12);
@@ -136,6 +145,7 @@
       position: relative;
       transition: color 0.25s ease, text-shadow 0.25s ease;
       color: #52525b; 
+      white-space: nowrap; /* 確保文字不折行 */
     }
     .tab-btn::after {
       content: '';
@@ -159,100 +169,104 @@
   </style>
 </head>
 
-<body class="bg-obsidian text-zinc-300 font-sans antialiased">
+<body class="bg-obsidian text-zinc-300 font-sans antialiased overflow-x-hidden">
 
   <!-- ─── NAVBAR ──────────────────────────────────────────────── -->
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-5">
-    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4 md:py-5 transition-all">
+    <div class="max-w-7xl mx-auto px-5 md:px-6 flex items-center justify-between">
 
       <a href="#" class="flex items-baseline gap-2">
         <span class="font-serif text-xl font-bold tracking-[0.18em] text-gold">AQUA</span>
-        <span class="text-[11px] text-zinc-600 tracking-[0.25em] font-light">水瓶</span>
+        <span class="text-[11px] text-zinc-600 tracking-[0.25em] font-light hidden sm:inline-block">水瓶</span>
       </a>
 
+      <!-- 電腦版選單 -->
       <div class="hidden md:flex items-center gap-10">
         <a href="#about"    class="text-[11px] tracking-[0.22em] uppercase text-zinc-500 hover:text-gold transition-colors duration-200">品牌故事</a>
         <a href="#menu"     class="text-[11px] tracking-[0.22em] uppercase text-zinc-500 hover:text-gold transition-colors duration-200">菜單</a>
         <a href="#location" class="text-[11px] tracking-[0.22em] uppercase text-zinc-500 hover:text-gold transition-colors duration-200">門市</a>
       </div>
 
+      <!-- 手機版漢堡按鈕 -->
       <button id="mobile-btn" class="md:hidden text-zinc-500 hover:text-gold transition-colors" aria-label="開啟選單">
         <i data-lucide="menu" class="w-6 h-6"></i>
       </button>
     </div>
 
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden mt-4 px-6 py-6 flex flex-col gap-6 border-t border-zinc-800/50 bg-ink/95 backdrop-blur-xl">
-      <a href="#about"    class="mobile-link text-sm tracking-[0.2em] text-zinc-400 hover:text-gold transition-colors">品牌故事</a>
-      <a href="#menu"     class="mobile-link text-sm tracking-[0.2em] text-zinc-400 hover:text-gold transition-colors">菜單</a>
-      <a href="#location" class="mobile-link text-sm tracking-[0.2em] text-zinc-400 hover:text-gold transition-colors">門市</a>
+    <!-- 手機版下拉選單 -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full px-6 py-8 flex flex-col gap-8 border-t border-zinc-800/80 bg-ink/98 backdrop-blur-2xl shadow-2xl">
+      <a href="#about"    class="mobile-link text-sm tracking-[0.25em] text-zinc-400 hover:text-gold transition-colors text-center">品牌故事 ABOUT</a>
+      <a href="#menu"     class="mobile-link text-sm tracking-[0.25em] text-zinc-400 hover:text-gold transition-colors text-center">極致菜單 MENU</a>
+      <a href="#location" class="mobile-link text-sm tracking-[0.25em] text-zinc-400 hover:text-gold transition-colors text-center">門市資訊 LOCATION</a>
     </div>
   </nav>
 
   <!-- ─── HERO ─────────────────────────────────────────────────── -->
-  <section class="hero-section relative min-h-[100dvh] flex items-center">
+  <section class="hero-section relative min-h-[100dvh] flex items-center pt-24 md:pt-0">
     <!-- Dark overlay -->
-    <div class="absolute inset-0 bg-black/70"></div>
+    <div class="absolute inset-0 bg-black/75 md:bg-black/70"></div>
     
     <!-- Neon cyan ambient light -->
-    <div class="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none bg-cyan-500/15 blur-[120px]"></div>
+    <div class="absolute top-1/4 right-0 md:right-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full pointer-events-none bg-cyan-500/20 md:bg-cyan-500/15 blur-[90px] md:blur-[120px]"></div>
     
     <!-- Warm gold counter-light bottom-left -->
-    <div class="absolute bottom-1/4 left-1/6 w-72 h-72 rounded-full pointer-events-none"
-         style="background:radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%); filter:blur(80px);"></div>
+    <div class="absolute bottom-1/4 left-0 md:left-1/6 w-60 h-60 md:w-72 md:h-72 rounded-full pointer-events-none"
+         style="background:radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%); filter:blur(60px);"></div>
          
     <!-- Bottom fade to body -->
-    <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-obsidian to-transparent"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-32 md:h-40 bg-gradient-to-t from-obsidian to-transparent"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6 w-full pt-28 pb-24 flex flex-col md:flex-row items-center justify-between gap-12">
-      <div class="max-w-xl text-center md:text-left w-full">
-
+    <div class="relative z-10 max-w-7xl mx-auto px-5 md:px-6 w-full pb-20 md:pb-24 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-12 mt-10 md:mt-0">
+      
+      <!-- 文案區塊 -->
+      <div class="max-w-xl text-center md:text-left w-full mt-4 md:mt-28">
         <!-- Eyebrow -->
-        <div class="flex items-center justify-center md:justify-start gap-4 mb-8">
-          <div class="h-px w-8 bg-gold/70"></div>
-          <span class="font-serif text-[10px] tracking-[0.45em] uppercase text-gold/80">Premium Tea Boutique</span>
+        <div class="flex items-center justify-center md:justify-start gap-4 mb-6 md:mb-8">
+          <div class="h-px w-6 md:w-8 bg-gold/70"></div>
+          <span class="font-serif text-[9px] md:text-[10px] tracking-[0.35em] md:tracking-[0.45em] uppercase text-gold/80">Premium Tea Boutique</span>
+          <div class="h-px w-6 bg-gold/70 md:hidden"></div>
         </div>
 
         <!-- Headline -->
-        <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-7">
+        <h1 class="font-serif text-5xl sm:text-5xl md:text-7xl font-bold text-white leading-[1.15] md:leading-[1.1] mb-6 md:mb-7">
           淬鍊極致<br>
           <span class="text-gold-light italic">茗韻奢華</span>
         </h1>
 
         <!-- Body -->
-        <p class="text-zinc-400 text-base md:text-lg font-light leading-relaxed max-w-sm mb-10 mx-auto md:mx-0">
+        <p class="text-zinc-400 text-sm md:text-lg font-light leading-relaxed max-w-sm mb-10 mx-auto md:mx-0 px-4 md:px-0">
           以匠心工藝重新定義現代茶飲。嚴選頂級原葉與時令鮮果，於曜石黑與淬金交錯的空間中，獻上一場無與倫比的味覺饗宴。
         </p>
 
         <!-- CTA -->
         <a href="#menu"
-           class="inline-flex items-center justify-center md:justify-start gap-3 border border-gold/55 text-gold text-[11px] tracking-[0.28em] uppercase px-8 py-4
+           class="inline-flex items-center justify-center md:justify-start gap-3 border border-gold/55 text-gold text-[10px] md:text-[11px] tracking-[0.28em] uppercase px-8 py-3.5 md:py-4
                   hover:bg-gold hover:text-black transition-all duration-300 group">
           探索菜單
           <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200"></i>
         </a>
       </div>
       
-      <!-- 主視覺意象 -->
-      <div class="relative flex justify-center w-full max-w-md mt-12 md:mt-0">
+      <!-- 主視覺意象 (手機版微調大小) -->
+      <div class="relative flex justify-center w-full max-w-[280px] sm:max-w-[320px] md:max-w-md mt-6 md:mt-0">
           <div class="relative w-full aspect-[4/5] bg-zinc-900/50 border border-zinc-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col items-center justify-center backdrop-blur-sm">
               <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-              <span class="text-zinc-600 text-sm font-light z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+              <span class="text-zinc-600 text-xs md:text-sm font-light z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
               
               <!-- 模擬店面霓虹燈 AQUA -->
-              <div class="absolute bottom-16 z-20 flex flex-col items-center w-full">
-                  <h2 class="text-6xl font-script text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)] tracking-wider">
+              <div class="absolute bottom-10 md:bottom-16 z-20 flex flex-col items-center w-full">
+                  <h2 class="text-5xl md:text-6xl font-script text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)] tracking-wider">
                       Aqua
                   </h2>
               </div>
           </div>
-          <div class="absolute -inset-4 border border-gold/20 z-0 hidden md:block"></div>
+          <div class="absolute -inset-3 md:-inset-4 border border-gold/20 z-0 hidden sm:block"></div>
       </div>
     </div>
 
     <!-- Scroll pulse -->
-    <div class="absolute bottom-9 left-1/2 -translate-x-1/2 z-10">
-      <div class="w-px h-10 bg-gradient-to-b from-gold/50 to-transparent animate-pulse mx-auto"></div>
+    <div class="absolute bottom-6 md:bottom-9 left-1/2 -translate-x-1/2 z-10">
+      <div class="w-px h-8 md:h-10 bg-gradient-to-b from-gold/50 to-transparent animate-pulse mx-auto"></div>
     </div>
   </section>
 
@@ -260,7 +274,7 @@
   <section class="bg-ink">
     <div class="grid grid-cols-1 md:grid-cols-3">
 
-      <div class="amb-card relative h-64 md:h-80 overflow-hidden cursor-pointer">
+      <div class="amb-card relative h-56 md:h-80 overflow-hidden cursor-pointer">
         <div class="amb-img absolute inset-0 bg-zinc-900 flex items-center justify-center text-zinc-700 text-xs"></div>
         <div class="amb-overlay absolute inset-0"></div>
         <div class="absolute bottom-5 left-6 z-10 amb-label">
@@ -269,7 +283,7 @@
         </div>
       </div>
 
-      <div class="amb-card relative h-64 md:h-80 overflow-hidden cursor-pointer">
+      <div class="amb-card relative h-56 md:h-80 overflow-hidden cursor-pointer">
         <div class="amb-img absolute inset-0 bg-zinc-800 flex items-center justify-center text-zinc-600 text-xs"></div>
         <div class="amb-overlay absolute inset-0"></div>
         <div class="absolute bottom-5 left-6 z-10 amb-label">
@@ -278,7 +292,7 @@
         </div>
       </div>
 
-      <div class="amb-card relative h-64 md:h-80 overflow-hidden cursor-pointer">
+      <div class="amb-card relative h-56 md:h-80 overflow-hidden cursor-pointer">
         <div class="amb-img absolute inset-0 bg-zinc-900 flex items-center justify-center text-zinc-700 text-xs"></div>
         <div class="amb-overlay absolute inset-0"></div>
         <div class="absolute bottom-5 left-6 z-10 amb-label">
@@ -291,41 +305,41 @@
   </section>
 
   <!-- ─── MENU ─────────────────────────────────────────────────── -->
-  <section id="menu" class="py-28 px-6 bg-ink relative">
+  <section id="menu" class="py-20 md:py-28 px-5 md:px-6 bg-ink relative">
     <div class="max-w-[90rem] mx-auto">
 
       <!-- Header -->
-      <div class="mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div class="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
-          <p class="font-serif text-[10px] tracking-[0.45em] uppercase text-gold mb-3">Signature Drinks</p>
-          <h2 class="font-serif text-4xl md:text-5xl font-bold text-white tracking-wide">AQUA COLLECTION</h2>
+          <p class="font-serif text-[9px] md:text-[10px] tracking-[0.35em] md:tracking-[0.45em] uppercase text-gold mb-2 md:mb-3">Signature Drinks</p>
+          <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-wide">AQUA COLLECTION</h2>
         </div>
-        <p class="text-zinc-600 text-sm font-light max-w-xs leading-relaxed">精選 19 款招牌飲品，每一杯皆是匠心之作。</p>
+        <p class="text-zinc-500 md:text-zinc-600 text-xs md:text-sm font-light max-w-xs leading-relaxed">精選 19 款招牌飲品，每一杯皆是匠心之作。</p>
       </div>
 
-      <!-- Category Tabs -->
-      <div class="flex flex-wrap items-center gap-8 mb-12 border-b border-zinc-800/60 pb-0">
-        <button class="tab-btn active pb-4 font-serif text-[11px] tracking-[0.3em] uppercase" data-target="all">全部 <span class="opacity-50 text-[9px]">ALL</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.3em] uppercase" data-target="sig">招牌 <span class="opacity-50 text-[9px]">SIGNATURE</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.3em] uppercase" data-target="milk">醇奶 <span class="opacity-50 text-[9px]">MILK</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.3em] uppercase" data-target="fruit">鮮果 <span class="opacity-50 text-[9px]">FRUIT</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.3em] uppercase" data-target="tea">好茶 <span class="opacity-50 text-[9px]">PURE</span></button>
+      <!-- Category Tabs (加入手機版橫向滑動 hide-scrollbar) -->
+      <div class="flex overflow-x-auto hide-scrollbar items-center gap-6 md:gap-8 mb-10 md:mb-12 border-b border-zinc-800/60 pb-0 w-full">
+        <button class="tab-btn active pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="all">全部 <span class="opacity-50 text-[9px]">ALL</span></button>
+        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="sig">招牌 <span class="opacity-50 text-[9px]">SIGNATURE</span></button>
+        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="milk">醇奶 <span class="opacity-50 text-[9px]">MILK</span></button>
+        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="fruit">鮮果 <span class="opacity-50 text-[9px]">FRUIT</span></button>
+        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="tea">好茶 <span class="opacity-50 text-[9px]">PURE</span></button>
       </div>
 
-      <!-- Grid -->
-      <div id="drink-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 relative">
+      <!-- Grid (手機版 2 欄，平板以上 4 欄) -->
+      <div id="drink-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 relative">
 
         <!-- 1 招牌牛奶珍珠 (sig) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 招牌牛奶］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 招牌牛奶］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">招牌牛奶珍珠</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Signature Pearl Milk</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">招牌牛奶珍珠</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Signature Pearl Milk</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -333,14 +347,14 @@
         <!-- 2 珍珠系列 (milk) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="milk">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 珍珠系列］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 珍珠系列］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">珍珠系列</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Pearl Collection</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">珍珠系列</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Pearl Collection</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -348,14 +362,14 @@
         <!-- 3 招牌綠豆沙 (sig) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 綠豆沙］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 綠豆沙］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">招牌綠豆沙</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Mung Bean Smoothie</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">招牌綠豆沙</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Mung Bean Smoothie</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">50</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">50</span>
             </div>
           </div>
         </div>
@@ -363,14 +377,14 @@
         <!-- 4 仙草茶 (tea) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 仙草茶］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 仙草茶］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">仙草茶</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Grass Jelly Tea</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">仙草茶</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Grass Jelly Tea</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">40</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
             </div>
           </div>
         </div>
@@ -378,14 +392,14 @@
         <!-- 5 草莓奶凍 (milk) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="milk">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 草莓奶凍］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 草莓奶凍］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">草莓奶凍</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Strawberry Milk Jelly</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">草莓奶凍</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Strawberry Milk Jelly</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">40</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
             </div>
           </div>
         </div>
@@ -393,14 +407,14 @@
         <!-- 6 夏威夷・俄羅斯紅茶 (tea) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 俄羅斯紅茶］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 俄羅斯紅茶］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">夏威夷・俄羅斯紅茶</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Hawaii & Russian Tea</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">夏威夷・俄羅斯紅茶</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Hawaii & Russian Tea</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">35</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35</span>
             </div>
           </div>
         </div>
@@ -408,14 +422,14 @@
         <!-- 7 台灣好茶 (tea) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 台灣好茶］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 台灣好茶］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">台灣好茶</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Premium Oolong</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">台灣好茶</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Premium Oolong</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">35</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35</span>
             </div>
           </div>
         </div>
@@ -423,14 +437,14 @@
         <!-- 8 四季春沁・Q波椰 (tea) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 四季春沁］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 四季春沁］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">四季春沁・Q波椰</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Four Seasons Tea</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">四季春沁・Q波椰</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Four Seasons Tea</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -438,14 +452,14 @@
         <!-- 9 菊花冰釀 (tea) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 菊花冰釀］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 菊花冰釀］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">菊花冰釀</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Chrysanthemum Tea</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">菊花冰釀</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Chrysanthemum Tea</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -453,14 +467,14 @@
         <!-- 10 金桔梅子 (fruit) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 金桔梅子］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 金桔梅子］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">金桔梅子</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Kumquat Plum</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">金桔梅子</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Kumquat Plum</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -468,14 +482,14 @@
         <!-- 11 蔓越莓 (fruit) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 蔓越莓］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 蔓越莓］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">蔓越莓</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Cranberry Ice</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">蔓越莓</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Cranberry Ice</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">35</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35</span>
             </div>
           </div>
         </div>
@@ -483,14 +497,14 @@
         <!-- 12 拿鐵系列 (milk) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="milk">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 拿鐵系列］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 拿鐵系列］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">拿鐵系列</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Latte Series</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">拿鐵系列</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Latte Series</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">40</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
             </div>
           </div>
         </div>
@@ -498,14 +512,14 @@
         <!-- 13 蜂蜜系列 (fruit) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 蜂蜜系列］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 蜂蜜系列］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">蜂蜜系列</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Honey & Gel Series</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">蜂蜜系列</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Honey & Gel Series</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -513,14 +527,14 @@
         <!-- 14 陳皮桔茶 (tea) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 陳皮桔茶］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 陳皮桔茶］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">陳皮桔茶</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Aged Chenpi Tea</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">陳皮桔茶</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Aged Chenpi Tea</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -528,14 +542,14 @@
         <!-- 15 黑芝麻堅果熱飲 (sig) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 黑芝麻堅果］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 黑芝麻堅果］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">黑芝麻堅果熱飲</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Black Sesame Nut</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">黑芝麻堅果熱飲</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Black Sesame Nut</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -543,14 +557,14 @@
         <!-- 16 楊桃汁 (fruit) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 楊桃汁］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 楊桃汁］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">楊桃汁</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Starfruit Juice</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">楊桃汁</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Starfruit Juice</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">40</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
             </div>
           </div>
         </div>
@@ -558,14 +572,14 @@
         <!-- 17 冰釀青梅綠 (fruit) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 冰釀青梅綠］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 冰釀青梅綠］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">冰釀青梅綠</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Green Plum Tea</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">冰釀青梅綠</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Green Plum Tea</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">35</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35</span>
             </div>
           </div>
         </div>
@@ -573,14 +587,14 @@
         <!-- 18 百香 QQ (fruit) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 百香 QQ］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 百香 QQ］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">百香 QQ</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Passionfruit QQ</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">百香 QQ</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Passionfruit QQ</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">45</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
@@ -588,14 +602,14 @@
         <!-- 19 AQUA 獨創・酸辣湯 (sig) -->
         <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
           <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
-            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-xs">［Image of 獨創酸辣湯］</div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
+            <div class="drink-img absolute inset-0 bg-cover bg-center opacity-70 flex items-center justify-center text-zinc-700 text-[10px] md:text-xs">［Image of 獨創酸辣湯］</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium tracking-wide leading-snug">AQUA 獨創・酸辣湯</p>
-                <p class="font-serif text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Signature Jelly Drink</p>
+                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">AQUA 獨創・酸辣湯</p>
+                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Signature Jelly Drink</p>
               </div>
-              <span class="font-serif text-gold font-semibold text-lg shrink-0">50</span>
+              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">50</span>
             </div>
           </div>
         </div>
@@ -605,22 +619,22 @@
   </section>
 
   <!-- ─── BRAND STORY ───────────────────────────────────────────── -->
-  <section id="about" class="py-28 px-6 bg-obsidian border-t border-zinc-900/80">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
+  <section id="about" class="py-20 md:py-28 px-5 md:px-6 bg-obsidian border-t border-zinc-900/80">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center">
 
       <!-- Text -->
-      <div class="space-y-8">
+      <div class="space-y-6 md:space-y-8 order-2 md:order-1">
         <div>
-          <div class="flex items-center gap-4 mb-6">
-            <div class="h-px w-8 bg-gold/65"></div>
-            <span class="font-serif text-[10px] tracking-[0.45em] uppercase text-gold/75">Our Philosophy</span>
+          <div class="flex items-center gap-4 mb-4 md:mb-6">
+            <div class="h-px w-6 md:w-8 bg-gold/65"></div>
+            <span class="font-serif text-[9px] md:text-[10px] tracking-[0.35em] md:tracking-[0.45em] uppercase text-gold/75">Our Philosophy</span>
           </div>
-          <h2 class="font-serif text-4xl md:text-5xl font-bold text-white leading-[1.15]">
+          <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.25] md:leading-[1.15]">
             重新定義<br>茶飲的精品哲學。
           </h2>
         </div>
 
-        <div class="space-y-5 text-zinc-400 font-light leading-relaxed text-[15px]">
+        <div class="space-y-4 md:space-y-5 text-zinc-400 font-light leading-relaxed text-sm md:text-[15px]">
           <p>
             「AQUA 水瓶」不僅是一間茶飲店，更是一個融合味覺與視覺美學的高階場域。以深邃曜石黑為主調，點綴奢華古銅金，完美呼應我們對飲品品質的極致苛求。
           </p>
@@ -630,54 +644,54 @@
         </div>
 
         <div class="pt-4 border-t border-zinc-900">
-          <p class="font-serif text-xs tracking-[0.3em] uppercase text-zinc-600 mt-5">Taiwan · Est. 2020</p>
+          <p class="font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-zinc-600 mt-4 md:mt-5">Taiwan · Est. 2020</p>
         </div>
       </div>
 
       <!-- Image -->
-      <div class="relative w-full max-w-md mx-auto md:ml-auto">
-        <div class="aspect-square overflow-hidden bg-zinc-900 flex items-center justify-center text-zinc-700 text-sm">
+      <div class="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-md mx-auto md:ml-auto order-1 md:order-2">
+        <div class="aspect-square overflow-hidden bg-zinc-900 flex items-center justify-center text-zinc-700 text-xs md:text-sm">
           ［Image of 品牌形象大圖］
         </div>
-        <div class="absolute -bottom-4 -right-4 w-full h-full border border-gold/15 -z-10"></div>
+        <div class="absolute -bottom-3 -right-3 md:-bottom-4 md:-right-4 w-full h-full border border-gold/15 -z-10"></div>
       </div>
 
     </div>
   </section>
 
   <!-- ─── FOOTER ────────────────────────────────────────────────── -->
-  <footer id="location" class="bg-ink border-t border-zinc-900/80 pt-20 pb-10 px-6">
+  <footer id="location" class="bg-ink border-t border-zinc-900/80 pt-16 md:pt-20 pb-10 px-5 md:px-6">
     <div class="max-w-7xl mx-auto">
 
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-zinc-800/40">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 md:gap-12 pb-12 md:pb-16 border-b border-zinc-800/40">
 
         <!-- Brand column -->
-        <div class="md:col-span-5 space-y-6">
+        <div class="md:col-span-5 space-y-5 md:space-y-6 sm:col-span-2 md:sm:col-span-5">
           <div class="flex items-baseline gap-2">
             <span class="font-serif text-xl font-bold tracking-[0.18em] text-gold">AQUA</span>
             <span class="text-[11px] text-zinc-700 tracking-[0.25em]">水瓶</span>
           </div>
-          <p class="text-zinc-600 text-sm font-light leading-relaxed max-w-xs">
+          <p class="text-zinc-500 md:text-zinc-600 text-xs md:text-sm font-light leading-relaxed max-w-xs">
             品味純粹，極致淬鍊。<br>AQUA 水瓶將傳統茶道精神注入現代美學，為您打造頂級的飲茶體驗。
           </p>
           <div class="flex gap-3 pt-1">
             <a href="#" aria-label="Instagram"
-               class="w-9 h-9 border border-zinc-800 flex items-center justify-center text-zinc-600
+               class="w-8 h-8 md:w-9 md:h-9 border border-zinc-800 flex items-center justify-center text-zinc-600
                       hover:border-gold hover:text-gold transition-colors duration-200">
-              <i data-lucide="instagram" class="w-4 h-4"></i>
+              <i data-lucide="instagram" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
             </a>
             <a href="#" aria-label="Facebook"
-               class="w-9 h-9 border border-zinc-800 flex items-center justify-center text-zinc-600
+               class="w-8 h-8 md:w-9 md:h-9 border border-zinc-800 flex items-center justify-center text-zinc-600
                       hover:border-gold hover:text-gold transition-colors duration-200">
-              <i data-lucide="facebook" class="w-4 h-4"></i>
+              <i data-lucide="facebook" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
             </a>
           </div>
         </div>
 
         <!-- Sitemap -->
         <div class="md:col-span-3">
-          <h4 class="font-serif text-[10px] tracking-[0.3em] uppercase text-zinc-500 mb-6">Sitemap</h4>
-          <ul class="space-y-4 text-sm font-light text-zinc-600">
+          <h4 class="font-serif text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-zinc-600 md:text-zinc-500 mb-4 md:mb-6">Sitemap</h4>
+          <ul class="space-y-3 md:space-y-4 text-xs md:text-sm font-light text-zinc-500 md:text-zinc-600">
             <li><a href="#menu"     class="hover:text-gold transition-colors duration-200">菜單 Menu</a></li>
             <li><a href="#about"    class="hover:text-gold transition-colors duration-200">品牌哲學 About</a></li>
             <li><a href="#location" class="hover:text-gold transition-colors duration-200">門市資訊 Location</a></li>
@@ -685,20 +699,20 @@
         </div>
 
         <!-- Location -->
-        <div class="md:col-span-4">
-          <h4 class="font-serif text-[10px] tracking-[0.3em] uppercase text-zinc-500 mb-6">門市據點</h4>
-          <ul class="space-y-5 text-sm font-light text-zinc-500">
+        <div class="md:col-span-4 sm:col-span-2 md:sm:col-span-4">
+          <h4 class="font-serif text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-zinc-600 md:text-zinc-500 mb-4 md:mb-6">門市據點</h4>
+          <ul class="space-y-4 md:space-y-5 text-xs md:text-sm font-light text-zinc-400 md:text-zinc-500">
             <li class="flex items-start gap-3">
-              <i data-lucide="map-pin" class="w-4 h-4 text-gold shrink-0 mt-0.5"></i>
-              <span class="leading-relaxed">台北市中山區水漾大道 88 號<br><span class="text-xs text-zinc-600">AQUA 概念總店</span></span>
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 md:w-4 md:h-4 text-gold shrink-0 mt-0.5"></i>
+              <span class="leading-relaxed">台北市中山區水漾大道 88 號<br><span class="text-[10px] md:text-xs text-zinc-600">AQUA 概念總店</span></span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="phone" class="w-4 h-4 text-gold shrink-0"></i>
+              <i data-lucide="phone" class="w-3.5 h-3.5 md:w-4 md:h-4 text-gold shrink-0"></i>
               <span class="font-serif tracking-wider">02-2888-8888</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="clock" class="w-4 h-4 text-gold shrink-0"></i>
-              <span class="font-serif">MON – SUN &nbsp; 10:00 – 22:00</span>
+              <i data-lucide="clock" class="w-3.5 h-3.5 md:w-4 md:h-4 text-gold shrink-0"></i>
+              <span class="font-serif tracking-wider">MON – SUN &nbsp; 10:00 – 22:00</span>
             </li>
           </ul>
         </div>
@@ -706,10 +720,10 @@
       </div>
 
       <!-- Copyright row -->
-      <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4
-                  font-serif text-[11px] tracking-widest text-zinc-800 uppercase">
+      <div class="pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4
+                  font-serif text-[9px] md:text-[11px] tracking-widest text-zinc-700 md:text-zinc-800 uppercase text-center md:text-left">
         <p>© 2026 AQUA Premium Tea Boutique · All Rights Reserved</p>
-        <div class="flex gap-6">
+        <div class="flex gap-4 md:gap-6">
           <a href="#" class="hover:text-zinc-500 transition-colors">Privacy</a>
           <a href="#" class="hover:text-zinc-500 transition-colors">Terms</a>
         </div>
@@ -753,11 +767,11 @@
     const navbar = document.getElementById('navbar');
     const onScroll = () => {
       if (window.scrollY > 40) {
-        navbar.classList.add('nav-glass', 'py-3');
-        navbar.classList.remove('py-5');
+        navbar.classList.add('nav-glass', 'py-3', 'md:py-3');
+        navbar.classList.remove('py-4', 'md:py-5');
       } else {
-        navbar.classList.remove('nav-glass', 'py-3');
-        navbar.classList.add('py-5');
+        navbar.classList.remove('nav-glass', 'py-3', 'md:py-3');
+        navbar.classList.add('py-4', 'md:py-5');
       }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
