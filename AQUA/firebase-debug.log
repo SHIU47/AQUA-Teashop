@@ -1,0 +1,39 @@
+[debug] [2026-04-19T09:15:12.024Z] ----------------------------------------------------------------------
+[debug] [2026-04-19T09:15:12.027Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\user\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init hosting
+[debug] [2026-04-19T09:15:12.027Z] CLI Version:   15.5.1
+[debug] [2026-04-19T09:15:12.027Z] Platform:      win32
+[debug] [2026-04-19T09:15:12.027Z] Node Version:  v24.12.0
+[debug] [2026-04-19T09:15:12.027Z] Time:          Sun Apr 19 2026 17:15:12 GMT+0800 (台北標準時間)
+[debug] [2026-04-19T09:15:12.028Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\user\OneDrive\桌面\AQUA
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-04-19T09:15:17.902Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-19T09:15:17.902Z] > authorizing via signed-in user (ss23083937@gmail.com)
+[debug] [2026-04-19T09:15:17.903Z] Checked if tokens are valid: true, expires at: 1776593236450
+[debug] [2026-04-19T09:15:17.903Z] Checked if tokens are valid: true, expires at: 1776593236450
+[debug] [2026-04-19T09:15:17.904Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hvac-pro-20fb8 [none]
+[debug] [2026-04-19T09:15:18.533Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hvac-pro-20fb8 403
+[debug] [2026-04-19T09:15:18.533Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hvac-pro-20fb8 {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-04-19T09:15:18.534Z] Request to https://firebase.googleapis.com/v1beta1/projects/hvac-pro-20fb8 had HTTP Error: 403, The caller does not have permission
+[debug] [2026-04-19T09:15:18.618Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/hvac-pro-20fb8 had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\user\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:53:12)
+    at RetryOperation._fn (C:\Users\user\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:330:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[error] 
+[error] Error: Failed to get Firebase project hvac-pro-20fb8. Please make sure the project exists and your account has permission to access it.
