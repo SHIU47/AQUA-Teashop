@@ -4,28 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AQUA 水瓶 | Premium Tea Boutique</title>
-
-  <!-- === 社群分享預覽與廣告語設定 (Open Graph & Twitter Cards) === -->
-  <meta name="description" content="It's Tea Time! 💧 AQUA 水瓶以匠心工藝重新定義現代茶飲。嚴選頂級原葉，為您獻上無與倫比的味覺饗宴。點擊查看極致的茗韻奢華菜單！">
-  
-  <!-- Facebook / LINE / IG 分享設定 -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="AQUA 水瓶 | Premium Tea Boutique 頂級精品茶飲">
-  <meta property="og:description" content="It's Tea Time! 💧 AQUA 水瓶以匠心工藝重新定義現代茶飲。已多年專業品質，用心的職人精神，獻上一場無與倫比的味覺饗宴。">
+  <meta name="description" content="It's Tea Time! 💧 AQUA 水瓶以匠心工藝重新定義現代茶飲。嚴選頂級原葉，為您獻上無與倫比的味覺饗宴。">
+  <meta property="og:title" content="AQUA 水瓶 | Premium Tea Boutique">
   <meta property="og:image" content="og-image.jpg">
-  <meta property="og:url" content="https://shiu47.github.io/aqua-teashop/">
-
-  <!-- Twitter 分享設定 -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AQUA 水瓶 | Premium Tea Boutique 頂級精品茶飲">
-  <meta name="twitter:description" content="It's Tea Time! 💧 AQUA 水瓶以匠心工藝重新定義現代茶飲。點擊探索極致的茗韻奢華菜單！">
-  <meta name="twitter:image" content="og-image.jpg">
-  <!-- ========================================================= -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -36,13 +21,13 @@
           fontFamily: {
             sans: ['"Noto Sans TC"', 'sans-serif'],
             serif: ['"Playfair Display"', 'serif'],
-            script: ['cursive']
           },
           colors: {
             gold: '#d4af37',
             'gold-light': '#f0e6c8',
-            obsidian: '#0a0a0a',
-            ink: '#050505',
+            'gold-dim': '#8a7023',
+            obsidian: '#080808',
+            ink: '#040404',
           }
         }
       }
@@ -50,649 +35,844 @@
   </script>
 
   <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; }
     ::selection { background: #d4af37; color: #000; }
-
-    /* 整體捲軸樣式 (電腦版) */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: #050505; }
-    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #040404; }
+    ::-webkit-scrollbar-thumb { background: #1e1e1e; border-radius: 2px; }
     ::-webkit-scrollbar-thumb:hover { background: #d4af37; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
 
-    /* 隱藏水平滑動捲軸 (手機版 Tab 專用) */
-    .hide-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+    /* ─── Custom Cursor ─── */
+    * { cursor: none !important; }
+    #cursor-dot {
+      position: fixed; top: 0; left: 0;
+      width: 8px; height: 8px;
+      background: #d4af37;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.25s ease, height 0.25s ease, background 0.25s ease;
+      mix-blend-mode: difference;
     }
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none; /* Chrome, Safari and Opera */
+    #cursor-ring {
+      position: fixed; top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(212,175,55,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+    }
+    body:hover #cursor-ring { opacity: 1; }
+    .cursor-hover #cursor-dot { width: 12px; height: 12px; }
+    .cursor-hover #cursor-ring { width: 56px; height: 56px; border-color: rgba(212,175,55,0.8); }
+
+    /* ─── Page Loader ─── */
+    #loader {
+      position: fixed; inset: 0;
+      background: #040404;
+      z-index: 9000;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #loader.fade-out {
+      animation: loaderFade 0.9s cubic-bezier(0.76,0,0.24,1) forwards;
+    }
+    @keyframes loaderFade {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-20px); pointer-events: none; }
+    }
+    .loader-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px; font-weight: 700;
+      letter-spacing: 0.3em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(212,175,55,0.3);
+      animation: logoReveal 1.2s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;
+    }
+    @keyframes logoReveal {
+      0% { -webkit-text-stroke-color: rgba(212,175,55,0); color: transparent; letter-spacing: 0.6em; }
+      60% { -webkit-text-stroke-color: rgba(212,175,55,0.6); }
+      100% { -webkit-text-stroke-color: rgba(212,175,55,0); color: #d4af37; letter-spacing: 0.3em; }
+    }
+    .loader-line {
+      width: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, #d4af37, transparent);
+      animation: lineExpand 1s cubic-bezier(0.22,1,0.36,1) 0.8s forwards;
+    }
+    @keyframes lineExpand { to { width: 120px; } }
+    .loader-sub {
+      font-family: 'Playfair Display', serif;
+      font-size: 9px; letter-spacing: 0.45em;
+      color: transparent;
+      text-transform: uppercase;
+      animation: subReveal 0.8s ease 1.2s forwards;
+    }
+    @keyframes subReveal { to { color: rgba(212,175,55,0.5); } }
+
+    /* ─── Navbar ─── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      padding: 28px 0;
+      transition: padding 0.5s ease, background 0.5s ease, border-color 0.5s ease;
+    }
+    #navbar.scrolled {
+      padding: 14px 0;
+      background: rgba(4,4,4,0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(212,175,55,0.1);
     }
 
-    /* Navbar */
-    .nav-glass {
-      background: rgba(5, 5, 5, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+    /* ─── Hero ─── */
+    #hero {
+      position: relative;
+      min-height: 100dvh;
+      overflow: hidden;
     }
-
-    /* Hero */
-    .hero-section {
+    #hero-bg {
+      position: absolute; inset: -10%;
       background-image: url('S__31277127_0.jpg');
       background-size: cover;
       background-position: center 30%;
+      will-change: transform;
+    }
+    .hero-enter { opacity: 0; transform: translateY(30px); }
+    .hero-enter.in { animation: heroIn 1s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes heroIn {
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Ambience cards */
-    .amb-img {
-      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .amb-card:hover .amb-img { transform: scale(1.05); }
-
-    .amb-overlay {
-      background: rgba(0,0,0,0.48);
-      transition: background 0.4s ease;
-    }
-    .amb-card:hover .amb-overlay { background: rgba(0,0,0,0.75); }
-
-    .amb-label {
-      opacity: 0.7;
-      transition: opacity 0.35s ease, color 0.35s ease, transform 0.35s ease;
-    }
-    .amb-card:hover .amb-label {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
-    .amb-label * {
-      transition: color 0.35s ease;
-    }
-    .amb-card:hover .amb-label * {
-      color: #d4af37 !important;
-    }
-    .amb-label-sub {
-      color: #e4e4e7;
-    }
-
-    /* Menu cards */
-    .drink-img {
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .drink-card:hover .drink-img { transform: scale(1.06); }
-    
-    /* Drink card hover glow & layout transition */
-    .drink-card {
-      transition: box-shadow 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
-    }
-    
-    .drink-card.hidden-card {
+    /* ─── Scroll Reveal ─── */
+    .reveal {
       opacity: 0;
-      transform: scale(0.95);
-      pointer-events: none;
-      position: absolute;
-      visibility: hidden;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
     }
-
-    .drink-card:hover {
-      box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.4);
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+    .reveal-left {
+      opacity: 0; transform: translateX(-40px);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
     }
-
-    /* Card info lift on hover */
-    .drink-info {
-      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right {
+      opacity: 0; transform: translateX(40px);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
     }
-    .drink-card:hover .drink-info { transform: translateY(-3px); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
-    /* Menu tab filter */
+    /* ─── Ambience strip ─── */
+    .amb-card { overflow: hidden; }
+    .amb-img {
+      transition: transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .amb-card:hover .amb-img { transform: scale(1.08); }
+    .amb-overlay {
+      background: rgba(0,0,0,0.5);
+      transition: background 0.5s ease;
+    }
+    .amb-card:hover .amb-overlay { background: rgba(0,0,0,0.72); }
+    .amb-caption {
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease;
+    }
+    .amb-card:hover .amb-caption { transform: translateY(-6px); }
+    .amb-caption-en { transition: color 0.4s ease; }
+    .amb-card:hover .amb-caption-en { color: #d4af37; }
+
+    /* ─── Menu Tabs ─── */
     .tab-btn {
       position: relative;
-      transition: color 0.25s ease, text-shadow 0.25s ease;
-      color: #52525b; 
-      white-space: nowrap; /* 確保文字不折行 */
+      color: #52525b;
+      white-space: nowrap;
+      transition: color 0.25s ease;
     }
     .tab-btn::after {
       content: '';
-      position: absolute;
-      bottom: -2px; left: 0; right: 0;
+      position: absolute; bottom: -1px; left: 0; right: 0;
       height: 1px;
       background: #d4af37;
       transform: scaleX(0);
       transform-origin: center;
-      transition: transform 0.25s ease;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
     }
-    .tab-btn.active {
-      color: #d4af37;
-      text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-    }
+    .tab-btn.active { color: #d4af37; }
     .tab-btn.active::after { transform: scaleX(1); }
     .tab-btn:not(.active):hover { color: #a1a1aa; }
 
-    /* Nav transition */
-    #navbar { transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease; }
+    /* ─── Drink Cards ─── */
+    .drink-card {
+      transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease;
+      cursor: pointer;
+    }
+    .drink-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px -15px rgba(212,175,55,0.35);
+    }
+    .drink-img {
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .drink-card:hover .drink-img { transform: scale(1.07); }
+    .drink-info {
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    }
+    .drink-card:hover .drink-info { transform: translateY(-4px); }
+
+    /* card hide/show for filter */
+    .drink-card.hidden-card {
+      display: none;
+    }
+
+    /* ─── Lightbox ─── */
+    #lightbox {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(4,4,4,0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    #lightbox.open { opacity: 1; pointer-events: all; }
+    #lightbox-inner {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0;
+      max-width: 900px; width: 92%;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    #lightbox.open #lightbox-inner { transform: scale(1) translateY(0); }
+    #lightbox-img {
+      width: 100%; max-height: 65vh;
+      object-fit: cover;
+      border: 1px solid rgba(212,175,55,0.12);
+    }
+    #lightbox-info {
+      width: 100%;
+      padding: 28px 32px;
+      border: 1px solid rgba(212,175,55,0.12);
+      border-top: none;
+      background: rgba(8,8,8,0.8);
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    #lightbox-close {
+      position: fixed; top: 28px; right: 28px;
+      width: 44px; height: 44px;
+      border: 1px solid rgba(212,175,55,0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(212,175,55,0.7);
+      transition: all 0.25s ease;
+    }
+    #lightbox-close:hover {
+      border-color: #d4af37;
+      color: #d4af37;
+      background: rgba(212,175,55,0.08);
+    }
+
+    /* ─── Brand Stats ─── */
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 700;
+      color: #d4af37;
+      line-height: 1;
+    }
+
+    /* ─── Marquee ─── */
+    .marquee-track {
+      display: flex; gap: 48px;
+      animation: marquee 25s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* ─── Gold divider ─── */
+    .gold-rule {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .gold-rule::before, .gold-rule::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4));
+    }
+    .gold-rule::after {
+      background: linear-gradient(90deg, rgba(212,175,55,0.4), transparent);
+    }
+
+    /* ─── Nav link ─── */
+    .nav-link {
+      position: relative;
+      font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(161,161,170,0.8);
+      transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: ''; position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 1px; background: #d4af37;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-link:hover { color: #d4af37; }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    /* ─── Image grid lines ─── */
+    .frame-lines {
+      position: absolute;
+      border: 1px solid rgba(212,175,55,0.12);
+      transition: border-color 0.4s ease, transform 0.4s ease;
+    }
+
+    /* ─── About section ─── */
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap::before {
+      content: 'AQUA';
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(80px, 12vw, 160px);
+      font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(212,175,55,0.06);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 0;
+      letter-spacing: 0.15em;
+    }
   </style>
 </head>
 
-<body class="bg-obsidian text-zinc-300 font-sans antialiased overflow-x-hidden">
+<body class="bg-ink text-zinc-300 font-sans antialiased overflow-x-hidden">
 
-  <!-- ─── NAVBAR ──────────────────────────────────────────────── -->
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4 md:py-5 transition-all">
-    <div class="max-w-7xl mx-auto px-5 md:px-6 flex items-center justify-between">
+  <!-- ─── CUSTOM CURSOR ─── -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
 
-      <a href="#" class="flex items-baseline gap-2">
-        <span class="font-serif text-xl font-bold tracking-[0.18em] text-gold">AQUA</span>
-        <span class="text-[11px] text-zinc-600 tracking-[0.25em] font-light hidden sm:inline-block">水瓶</span>
+  <!-- ─── LOADER ─── -->
+  <div id="loader">
+    <div class="loader-logo">AQUA</div>
+    <div class="loader-line"></div>
+    <div class="loader-sub">Premium Tea Boutique</div>
+  </div>
+
+  <!-- ─── NAVBAR ─── -->
+  <nav id="navbar">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between">
+      <a href="#" class="flex items-baseline gap-2.5 group">
+        <span class="font-serif text-xl font-bold tracking-[0.2em] text-gold">AQUA</span>
+        <span class="text-[10px] text-zinc-700 tracking-[0.28em] font-light hidden sm:inline-block transition-colors duration-300 group-hover:text-zinc-500">水瓶</span>
       </a>
-
-      <!-- 電腦版選單 -->
-      <div class="hidden md:flex items-center gap-10">
-        <a href="#about"    class="text-[11px] tracking-[0.22em] uppercase text-zinc-500 hover:text-gold transition-colors duration-200">品牌故事</a>
-        <a href="#menu"     class="text-[11px] tracking-[0.22em] uppercase text-zinc-500 hover:text-gold transition-colors duration-200">菜單</a>
-        <a href="#location" class="text-[11px] tracking-[0.22em] uppercase text-zinc-500 hover:text-gold transition-colors duration-200">門市</a>
+      <div class="hidden md:flex items-center gap-12">
+        <a href="#about"    class="nav-link">品牌故事</a>
+        <a href="#menu"     class="nav-link">菜單</a>
+        <a href="#location" class="nav-link">門市</a>
       </div>
-
-      <!-- 手機版漢堡按鈕 -->
       <button id="mobile-btn" class="md:hidden text-zinc-500 hover:text-gold transition-colors" aria-label="開啟選單">
-        <i data-lucide="menu" class="w-6 h-6"></i>
+        <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
     </div>
-
-    <!-- 手機版下拉選單 -->
-    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full px-6 py-8 flex flex-col gap-8 border-t border-zinc-800/80 bg-ink/98 backdrop-blur-2xl shadow-2xl">
-      <a href="#about"    class="mobile-link text-sm tracking-[0.25em] text-zinc-400 hover:text-gold transition-colors text-center">品牌故事 ABOUT</a>
-      <a href="#menu"     class="mobile-link text-sm tracking-[0.25em] text-zinc-400 hover:text-gold transition-colors text-center">極致菜單 MENU</a>
-      <a href="#location" class="mobile-link text-sm tracking-[0.25em] text-zinc-400 hover:text-gold transition-colors text-center">門市資訊 LOCATION</a>
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full px-8 py-10 flex flex-col gap-8 border-t border-zinc-900/80 bg-ink/98 backdrop-blur-2xl shadow-2xl">
+      <a href="#about"    class="mobile-link font-serif text-[11px] tracking-[0.3em] uppercase text-zinc-400 hover:text-gold transition-colors text-center">品牌故事 · ABOUT</a>
+      <a href="#menu"     class="mobile-link font-serif text-[11px] tracking-[0.3em] uppercase text-zinc-400 hover:text-gold transition-colors text-center">極致菜單 · MENU</a>
+      <a href="#location" class="mobile-link font-serif text-[11px] tracking-[0.3em] uppercase text-zinc-400 hover:text-gold transition-colors text-center">門市資訊 · LOCATION</a>
     </div>
   </nav>
 
-  <!-- ─── HERO ─────────────────────────────────────────────────── -->
-  <section class="hero-section relative min-h-[100dvh] flex items-center pt-24 md:pt-0">
-    <!-- Dark overlay -->
-    <div class="absolute inset-0 bg-black/75 md:bg-black/70"></div>
-    
-    <!-- Neon cyan ambient light -->
-    <div class="absolute top-1/4 right-0 md:right-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full pointer-events-none bg-cyan-500/20 md:bg-cyan-500/15 blur-[90px] md:blur-[120px]"></div>
-    
-    <!-- Warm gold counter-light bottom-left -->
-    <div class="absolute bottom-1/4 left-0 md:left-1/6 w-60 h-60 md:w-72 md:h-72 rounded-full pointer-events-none"
-         style="background:radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%); filter:blur(60px);"></div>
-         
-    <!-- Bottom fade to body -->
-    <div class="absolute bottom-0 left-0 right-0 h-32 md:h-40 bg-gradient-to-t from-obsidian to-transparent"></div>
+  <!-- ─── HERO ─── -->
+  <section id="hero">
+    <div id="hero-bg"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-5 md:px-6 w-full pb-20 md:pb-24 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-12 mt-10 md:mt-0">
-      
-      <!-- 文案區塊 -->
-      <div class="max-w-xl text-center md:text-left w-full mt-4 md:mt-28">
-        <!-- Eyebrow -->
-        <div class="flex items-center justify-center md:justify-start gap-4 mb-6 md:mb-8">
-          <div class="h-px w-6 md:w-8 bg-gold/70"></div>
-          <span class="font-serif text-[9px] md:text-[10px] tracking-[0.35em] md:tracking-[0.45em] uppercase text-gold/80">Premium Tea Boutique</span>
-          <div class="h-px w-6 bg-gold/70 md:hidden"></div>
-        </div>
+    <!-- layered overlays -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent"></div>
 
-        <!-- Headline -->
-        <h1 class="font-serif text-5xl sm:text-5xl md:text-7xl font-bold text-white leading-[1.15] md:leading-[1.1] mb-6 md:mb-7">
-          淬鍊極致<br>
-          <span class="text-gold-light italic">茗韻奢華</span>
-        </h1>
+    <!-- ambient lights -->
+    <div class="absolute top-1/3 right-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
+         style="background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,transparent 70%);filter:blur(80px)"></div>
+    <div class="absolute bottom-1/3 left-1/6 w-64 h-64 rounded-full pointer-events-none"
+         style="background:radial-gradient(circle,rgba(212,175,55,0.1) 0%,transparent 70%);filter:blur(60px)"></div>
 
-        <!-- Body -->
-        <p class="text-zinc-400 text-sm md:text-lg font-light leading-relaxed max-w-sm mb-10 mx-auto md:mx-0 px-4 md:px-0">
-          AQUA 水瓶以匠心工藝重新定義現代茶飲。已多年專業品質，用心的職人精神，獻上一場無與倫比的味覺饗宴
-        </p>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-10 min-h-[100dvh] flex flex-col justify-center pb-24 pt-32 md:pt-0">
 
-        <!-- CTA -->
+      <!-- eyebrow -->
+      <div class="hero-enter flex items-center gap-4 mb-8" style="animation-delay:0.1s">
+        <div class="h-px w-10 bg-gold/60"></div>
+        <span class="font-serif text-[9px] tracking-[0.45em] uppercase text-gold/70">Premium Tea Boutique · Est. 2020</span>
+      </div>
+
+      <!-- headline -->
+      <h1 class="hero-enter font-serif font-bold text-white leading-[1.1] mb-6" style="font-size:clamp(44px,7vw,96px);animation-delay:0.25s">
+        淬鍊極致<br>
+        <em class="text-gold-light not-italic">茗韻奢華</em>
+      </h1>
+
+      <!-- body -->
+      <p class="hero-enter text-zinc-400 font-light leading-relaxed max-w-sm mb-10 text-sm md:text-base" style="animation-delay:0.4s">
+        AQUA 水瓶以匠心工藝重新定義現代茶飲，<br>
+        職人精神，獻上一場無與倫比的味覺饗宴。
+      </p>
+
+      <!-- CTA -->
+      <div class="hero-enter flex flex-wrap gap-4" style="animation-delay:0.55s">
         <a href="#menu"
-           class="inline-flex items-center justify-center md:justify-start gap-3 border border-gold/55 text-gold text-[10px] md:text-[11px] tracking-[0.28em] uppercase px-8 py-3.5 md:py-4
-                  hover:bg-gold hover:text-black transition-all duration-300 group">
+           class="inline-flex items-center gap-3 bg-gold text-black text-[10px] tracking-[0.28em] uppercase px-8 py-4 font-medium
+                  hover:bg-gold-light transition-all duration-300 group">
           探索菜單
           <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200"></i>
         </a>
+        <a href="#about"
+           class="inline-flex items-center gap-3 border border-zinc-700 text-zinc-400 text-[10px] tracking-[0.28em] uppercase px-8 py-4
+                  hover:border-gold/50 hover:text-gold transition-all duration-300">
+          品牌故事
+        </a>
       </div>
-    </div>
 
-    <!-- Scroll pulse -->
-    <div class="absolute bottom-6 md:bottom-9 left-1/2 -translate-x-1/2 z-10">
-      <div class="w-px h-8 md:h-10 bg-gradient-to-b from-gold/50 to-transparent animate-pulse mx-auto"></div>
+      <!-- scroll hint -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        <span class="font-serif text-[8px] tracking-[0.35em] uppercase text-zinc-700">Scroll</span>
+        <div class="w-px h-10 bg-gradient-to-b from-gold/40 to-transparent animate-pulse"></div>
+      </div>
     </div>
   </section>
 
-  <!-- ─── AMBIENCE STRIP ───────────────────────────────────────── -->
-  <section class="bg-ink">
-    <div class="grid grid-cols-1 md:grid-cols-3">
+  <!-- ─── MARQUEE STRIP ─── -->
+  <div class="bg-gold py-3 overflow-hidden">
+    <div class="marquee-track text-black font-serif text-[10px] tracking-[0.3em] uppercase font-semibold select-none">
+      <span>AQUA Premium Tea &nbsp;·&nbsp;</span><span>水瓶精品茶飲 &nbsp;·&nbsp;</span>
+      <span>Handcrafted with Passion &nbsp;·&nbsp;</span><span>宜蘭頭城 &nbsp;·&nbsp;</span>
+      <span>Est. 2020 &nbsp;·&nbsp;</span><span>台灣在地好茶 &nbsp;·&nbsp;</span>
+      <span>AQUA Premium Tea &nbsp;·&nbsp;</span><span>水瓶精品茶飲 &nbsp;·&nbsp;</span>
+      <span>Handcrafted with Passion &nbsp;·&nbsp;</span><span>宜蘭頭城 &nbsp;·&nbsp;</span>
+      <span>Est. 2020 &nbsp;·&nbsp;</span><span>台灣在地好茶 &nbsp;·&nbsp;</span>
+    </div>
+  </div>
 
-      <div class="amb-card relative h-56 md:h-80 overflow-hidden cursor-pointer">
-        <div class="amb-img absolute inset-0 bg-cover bg-center" style="background-image:url('S__31277125_0.jpg')"></div>
-        <div class="amb-overlay absolute inset-0"></div>
-        <div class="absolute bottom-5 left-6 z-10 amb-label">
-          <p class="font-serif text-[9px] tracking-[0.35em] uppercase text-gold/75 mb-1">Boutique</p>
-          <p class="amb-label-sub text-sm font-light tracking-widest">精品門市</p>
-        </div>
+  <!-- ─── AMBIENCE STRIP ─── -->
+  <section class="grid grid-cols-1 md:grid-cols-3">
+    <div class="amb-card relative h-64 md:h-96 overflow-hidden reveal reveal-delay-1">
+      <div class="amb-img absolute inset-0 bg-cover bg-center" style="background-image:url('S__31277125_0.jpg')"></div>
+      <div class="amb-overlay absolute inset-0"></div>
+      <div class="absolute bottom-6 left-7 z-10 amb-caption">
+        <p class="font-serif text-[9px] tracking-[0.38em] uppercase text-gold/70 mb-1.5 amb-caption-en">Boutique</p>
+        <p class="text-sm font-light tracking-[0.2em] text-zinc-200">精品門市</p>
       </div>
-
-      <div class="amb-card relative h-56 md:h-80 overflow-hidden cursor-pointer">
-        <div class="amb-img absolute inset-0 bg-cover bg-center" style="background-image:url('S__31277126_0.jpg')"></div>
-        <div class="amb-overlay absolute inset-0"></div>
-        <div class="absolute bottom-5 left-6 z-10 amb-label">
-          <p class="font-serif text-[9px] tracking-[0.35em] uppercase text-gold/75 mb-1">Interior</p>
-          <p class="amb-label-sub text-sm font-light tracking-widest">精品空間</p>
-        </div>
+      <!-- corner accents -->
+      <div class="absolute top-4 left-4 w-5 h-5 border-t border-l border-gold/20 pointer-events-none"></div>
+      <div class="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-gold/20 pointer-events-none"></div>
+    </div>
+    <div class="amb-card relative h-64 md:h-96 overflow-hidden reveal reveal-delay-2">
+      <div class="amb-img absolute inset-0 bg-cover bg-center" style="background-image:url('S__31277126_0.jpg')"></div>
+      <div class="amb-overlay absolute inset-0"></div>
+      <div class="absolute bottom-6 left-7 z-10 amb-caption">
+        <p class="font-serif text-[9px] tracking-[0.38em] uppercase text-gold/70 mb-1.5 amb-caption-en">Interior</p>
+        <p class="text-sm font-light tracking-[0.2em] text-zinc-200">精品空間</p>
       </div>
-
-      <div class="amb-card relative h-56 md:h-80 overflow-hidden cursor-pointer">
-        <div class="amb-img absolute inset-0 bg-cover bg-center" style="background-image:url('S__31277128_0.jpg')"></div>
-        <div class="amb-overlay absolute inset-0"></div>
-        <div class="absolute bottom-5 left-6 z-10 amb-label">
-          <p class="font-serif text-[9px] tracking-[0.35em] uppercase text-gold/75 mb-1">Craftsmanship</p>
-          <p class="amb-label-sub text-sm font-light tracking-widest">職人工藝</p>
-        </div>
+      <div class="absolute top-4 left-4 w-5 h-5 border-t border-l border-gold/20 pointer-events-none"></div>
+      <div class="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-gold/20 pointer-events-none"></div>
+    </div>
+    <div class="amb-card relative h-64 md:h-96 overflow-hidden reveal reveal-delay-3">
+      <div class="amb-img absolute inset-0 bg-cover bg-center" style="background-image:url('S__31277128_0.jpg')"></div>
+      <div class="amb-overlay absolute inset-0"></div>
+      <div class="absolute bottom-6 left-7 z-10 amb-caption">
+        <p class="font-serif text-[9px] tracking-[0.38em] uppercase text-gold/70 mb-1.5 amb-caption-en">Craftsmanship</p>
+        <p class="text-sm font-light tracking-[0.2em] text-zinc-200">職人工藝</p>
       </div>
-
+      <div class="absolute top-4 left-4 w-5 h-5 border-t border-l border-gold/20 pointer-events-none"></div>
+      <div class="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-gold/20 pointer-events-none"></div>
     </div>
   </section>
 
-  <!-- ─── MENU ─────────────────────────────────────────────────── -->
-  <section id="menu" class="py-20 md:py-28 px-5 md:px-6 bg-ink relative">
-    <div class="max-w-[90rem] mx-auto">
+  <!-- ─── STATS ROW ─── -->
+  <section class="py-16 md:py-20 border-y border-zinc-900/60 bg-obsidian">
+    <div class="max-w-5xl mx-auto px-6 md:px-10 grid grid-cols-3 gap-8 text-center reveal">
+      <div>
+        <div class="stat-num">20<span class="text-gold/40 text-2xl">+</span></div>
+        <p class="font-serif text-[9px] tracking-[0.3em] uppercase text-zinc-600 mt-2">招牌飲品</p>
+      </div>
+      <div class="border-x border-zinc-900">
+        <div class="stat-num">26<span class="text-gold/40 text-2xl">+</span></div>
+        <p class="font-serif text-[9px] tracking-[0.3em] uppercase text-zinc-600 mt-2">創業年資</p>
+      </div>
+      <div>
+        <div class="stat-num">1</div>
+        <p class="font-serif text-[9px] tracking-[0.3em] uppercase text-zinc-600 mt-2">概念總店</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MENU ─── -->
+  <section id="menu" class="py-20 md:py-28 px-5 md:px-10 bg-ink">
+    <div class="max-w-[96rem] mx-auto">
 
       <!-- Header -->
-      <div class="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div class="mb-14 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-4 reveal">
         <div>
-          <p class="font-serif text-[9px] md:text-[10px] tracking-[0.35em] md:tracking-[0.45em] uppercase text-gold mb-2 md:mb-3">Signature Drinks</p>
-          <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-wide">AQUA COLLECTION</h2>
+          <p class="font-serif text-[9px] tracking-[0.42em] uppercase text-gold mb-3">Signature Collection</p>
+          <h2 class="font-serif font-bold text-white tracking-wide" style="font-size:clamp(28px,4vw,52px)">AQUA MENU</h2>
         </div>
-        <p class="text-zinc-500 md:text-zinc-600 text-xs md:text-sm font-light max-w-xs leading-relaxed">精選 20 款招牌飲品，每一杯皆是匠心之作。</p>
+        <p class="text-zinc-600 text-xs font-light max-w-xs leading-relaxed">精選 20 款招牌飲品，每一杯皆是匠心之作。<br>點擊卡片欣賞完整呈現。</p>
       </div>
 
-      <!-- Category Tabs (加入手機版橫向滑動 hide-scrollbar) -->
-      <div class="flex overflow-x-auto hide-scrollbar items-center gap-6 md:gap-8 mb-10 md:mb-12 border-b border-zinc-800/60 pb-0 w-full">
-        <button class="tab-btn active pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="all">全部 <span class="opacity-50 text-[9px]">ALL</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="sig">招牌 <span class="opacity-50 text-[9px]">SIGNATURE</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="milk">醇奶 <span class="opacity-50 text-[9px]">MILK</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="fruit">鮮果 <span class="opacity-50 text-[9px]">FRUIT</span></button>
-        <button class="tab-btn pb-4 font-serif text-[11px] tracking-[0.2em] md:tracking-[0.3em] uppercase shrink-0" data-target="tea">好茶 <span class="opacity-50 text-[9px]">PURE</span></button>
+      <!-- Tabs -->
+      <div class="flex overflow-x-auto hide-scrollbar items-center gap-7 md:gap-10 mb-10 md:mb-12 border-b border-zinc-900 pb-0 reveal">
+        <button class="tab-btn active pb-4 font-serif text-[10px] tracking-[0.28em] uppercase shrink-0" data-target="all">全部 <span class="opacity-40 text-[8px]">ALL</span></button>
+        <button class="tab-btn pb-4 font-serif text-[10px] tracking-[0.28em] uppercase shrink-0" data-target="sig">招牌 <span class="opacity-40 text-[8px]">SIGNATURE</span></button>
+        <button class="tab-btn pb-4 font-serif text-[10px] tracking-[0.28em] uppercase shrink-0" data-target="milk">醇奶 <span class="opacity-40 text-[8px]">MILK</span></button>
+        <button class="tab-btn pb-4 font-serif text-[10px] tracking-[0.28em] uppercase shrink-0" data-target="fruit">鮮果 <span class="opacity-40 text-[8px]">FRUIT</span></button>
+        <button class="tab-btn pb-4 font-serif text-[10px] tracking-[0.28em] uppercase shrink-0" data-target="tea">好茶 <span class="opacity-40 text-[8px]">PURE</span></button>
       </div>
 
-      <!-- Grid (手機版 2 欄，平板以上 4 欄) -->
-      <div id="drink-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 relative">
+      <!-- Grid -->
+      <div id="drink-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
 
-        <!-- 1 招牌牛奶珍珠 (sig) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <!-- Cards -->
+        <div class="drink-card overflow-hidden reveal reveal-delay-1" data-cat="sig" data-name="招牌牛奶珍珠" data-en="Signature Pearl Milk" data-price="45" data-img="Menu/S__31277118_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277118_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">招牌牛奶珍珠</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Signature Pearl Milk</p>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">招牌牛奶珍珠</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Signature Pearl Milk</p>
+              <div class="flex items-center justify-between">
+                <div class="w-4 h-px bg-gold/40"></div>
+                <span class="font-serif text-gold font-semibold text-sm">$45</span>
               </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
             </div>
           </div>
         </div>
 
-        <!-- 2 珍珠系列 (milk) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="milk">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-2" data-cat="milk" data-name="珍珠系列" data-en="Pearl Collection" data-price="45" data-img="Menu/S__31277112_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277112_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">珍珠系列</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Pearl Collection</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">珍珠系列</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Pearl Collection</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 3 招牌綠豆沙 (sig) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-3" data-cat="sig" data-name="招牌綠豆沙" data-en="Mung Bean Smoothie" data-price="50" data-img="Menu/S__31277114_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277114_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">招牌綠豆沙</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Mung Bean Smoothie</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">50</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">招牌綠豆沙</p>
+              <p class="font-serif text-[8px] tracking-widests uppercase text-zinc-500 mb-2">Mung Bean Smoothie</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$50</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 4 仙草茶 (tea) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-4" data-cat="tea" data-name="仙草茶" data-en="Grass Jelly Tea" data-price="40" data-img="Menu/S__31277104_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277104_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">仙草茶</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Grass Jelly Tea</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">仙草茶</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Grass Jelly Tea</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$40</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 5 草莓奶凍 (milk) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="milk">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-1" data-cat="milk" data-name="草莓奶凍" data-en="Strawberry Milk Jelly" data-price="40" data-img="Menu/S__31277105_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277105_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">草莓奶凍</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Strawberry Milk Jelly</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">草莓奶凍</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Strawberry Milk Jelly</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$40</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 6 夏威夷・俄羅斯紅茶 (tea) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-2" data-cat="tea" data-name="夏威夷・俄羅斯紅茶" data-en="Hawaii & Russian Tea" data-price="35" data-img="Menu/S__31277106_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277106_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">夏威夷・俄羅斯紅茶</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Hawaii & Russian Tea</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">夏威夷・俄羅斯紅茶</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Hawaii & Russian Tea</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$35</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 7 台灣好茶 (tea) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-3" data-cat="tea" data-name="台灣好茶" data-en="Premium Oolong" data-price="30–40" data-img="Menu/S__31277107_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277107_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">台灣好茶</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Premium Oolong</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">30–40</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">台灣好茶</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Premium Oolong</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$30–40</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 8 四季春沁・Q波椰 (tea) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-4" data-cat="tea" data-name="四季春沁・Q波椰" data-en="Four Seasons Tea" data-price="35–50" data-img="Menu/S__31277117_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277117_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">四季春沁・Q波椰</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Four Seasons Tea</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35–50</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">四季春沁・Q波椰</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Four Seasons Tea</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$35–50</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 9 菊花冰釀 (tea) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-1" data-cat="tea" data-name="菊花冰釀" data-en="Chrysanthemum Tea" data-price="45" data-img="Menu/S__31277123_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277123_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">菊花冰釀</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Chrysanthemum Tea</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">菊花冰釀</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Chrysanthemum Tea</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 10 金桔梅子 (fruit) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-2" data-cat="fruit" data-name="金桔梅子" data-en="Kumquat Plum" data-price="45" data-img="Menu/S__31277121_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277121_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">金桔梅子</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Kumquat Plum</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">金桔梅子</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Kumquat Plum</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 11 蔓越莓 (fruit) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-3" data-cat="fruit" data-name="蔓越莓" data-en="Cranberry Ice" data-price="35" data-img="Menu/S__31277122_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277122_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">蔓越莓</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Cranberry Ice</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">蔓越莓</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Cranberry Ice</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$35</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 12 拿鐵系列 (milk) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="milk">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-4" data-cat="milk" data-name="拿鐵系列" data-en="Latte Series" data-price="40" data-img="Menu/S__31277109_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277109_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">拿鐵系列</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Latte Series</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">拿鐵系列</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Latte Series</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$40</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 13 蜂蜜系列 (fruit) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-1" data-cat="fruit" data-name="蜂蜜系列" data-en="Honey & Gel Series" data-price="45" data-img="Menu/S__31277110_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277110_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">蜂蜜系列</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Honey & Gel Series</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">蜂蜜系列</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Honey & Gel Series</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 14 陳皮桔茶 (tea) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="tea">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-2" data-cat="tea" data-name="陳皮桔茶" data-en="Aged Chenpi Tea" data-price="45" data-img="Menu/S__31277108_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277108_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">陳皮桔茶</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Aged Chenpi Tea</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">陳皮桔茶</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Aged Chenpi Tea</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 15 黑芝麻堅果熱飲 (sig) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-3" data-cat="sig" data-name="黑芝麻堅果熱飲" data-en="Black Sesame Nut" data-price="45" data-img="Menu/S__31277111_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277111_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">黑芝麻堅果熱飲</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Black Sesame Nut</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">黑芝麻堅果熱飲</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Black Sesame Nut</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 16 楊桃汁 (fruit) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-4" data-cat="fruit" data-name="楊桃汁" data-en="Starfruit Juice" data-price="40" data-img="Menu/S__31277115_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277115_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">楊桃汁</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Starfruit Juice</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">40</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">楊桃汁</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Starfruit Juice</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$40</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 17 冰釀青梅綠 (fruit) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-1" data-cat="fruit" data-name="冰釀青梅綠" data-en="Green Plum Tea" data-price="35" data-img="Menu/S__31277116_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277116_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">冰釀青梅綠</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Green Plum Tea</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">35</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">冰釀青梅綠</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Green Plum Tea</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$35</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 18 百香 QQ (fruit) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="fruit">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-2" data-cat="fruit" data-name="百香 QQ" data-en="Passionfruit QQ" data-price="45" data-img="Menu/S__31277119_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277119_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">百香 QQ</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Passionfruit QQ</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">百香 QQ</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Passionfruit QQ</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 19 AQUA 獨創・酸辣湯 (sig) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div class="drink-card overflow-hidden reveal reveal-delay-3" data-cat="sig" data-name="AQUA 獨創・酸辣湯" data-en="Signature Jelly Drink" data-price="50" data-img="Menu/S__31277120_0.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S__31277120_0.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">AQUA 獨創・酸辣湯</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Signature Jelly Drink</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">50</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">AQUA 獨創・酸辣湯</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Signature Jelly Drink</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$50</span></div>
             </div>
           </div>
         </div>
- <!-- 20 AQUA 波霸奶茶 (sig) -->
-        <div class="drink-card group cursor-pointer overflow-hidden" data-cat="sig">
-          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-800 bg-zinc-900">
+
+        <div class="drink-card overflow-hidden reveal reveal-delay-4" data-cat="sig" data-name="AQUA 招牌波霸奶茶" data-en="Signature Boba Milk Tea" data-price="45" data-img="Menu/S_31277124.jpg">
+          <div class="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
             <div class="drink-img absolute inset-0 bg-cover bg-center" style="background-image:url('Menu/S_31277124.jpg')"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-            <div class="drink-info absolute bottom-0 left-0 right-0 p-3 md:p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2">
-              <div class="min-w-0">
-                <p class="text-white text-xs sm:text-sm font-medium tracking-wide leading-snug">AQUA 招牌波霸奶茶</p>
-                <p class="font-serif text-[8px] md:text-[9px] tracking-[0.1em] sm:tracking-widest uppercase text-zinc-500 mt-0.5 sm:mt-1 truncate">Signature Boba Milk Tea</p>
-              </div>
-              <span class="font-serif text-gold font-semibold text-base sm:text-lg shrink-0 mt-1 sm:mt-0">45</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div class="drink-info absolute bottom-0 left-0 right-0 p-3.5 md:p-4">
+              <p class="text-white text-xs font-medium tracking-wide leading-snug mb-0.5">AQUA 招牌波霸奶茶</p>
+              <p class="font-serif text-[8px] tracking-widest uppercase text-zinc-500 mb-2">Signature Boba Milk Tea</p>
+              <div class="flex items-center justify-between"><div class="w-4 h-px bg-gold/40"></div><span class="font-serif text-gold font-semibold text-sm">$45</span></div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- ─── BRAND STORY ───────────────────────────────────────────── -->
-  <section id="about" class="py-20 md:py-28 px-5 md:px-6 bg-obsidian border-t border-zinc-900/80">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center">
+  <!-- ─── LIGHTBOX ─── -->
+  <div id="lightbox" role="dialog" aria-modal="true">
+    <button id="lightbox-close" aria-label="關閉">
+      <i data-lucide="x" class="w-5 h-5"></i>
+    </button>
+    <div id="lightbox-inner">
+      <img id="lightbox-img" alt="" loading="lazy" style="display:none">
+      <div id="lightbox-info">
+        <div>
+          <p id="lightbox-name" class="font-serif text-xl font-bold text-white mb-1"></p>
+          <p id="lightbox-en" class="font-serif text-[10px] tracking-[0.3em] uppercase text-zinc-500"></p>
+        </div>
+        <div class="text-right">
+          <span id="lightbox-price" class="font-serif text-gold text-2xl font-bold"></span>
+          <p class="font-serif text-[9px] tracking-[0.25em] uppercase text-zinc-700 mt-1">NTD</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── BRAND STORY ─── -->
+  <section id="about" class="py-24 md:py-32 px-6 md:px-10 bg-obsidian border-t border-zinc-900/60">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 md:gap-24 lg:gap-32 items-center">
 
       <!-- Text -->
-      <div class="space-y-6 md:space-y-8 order-2 md:order-1">
+      <div class="space-y-8 order-2 md:order-1 reveal-left">
         <div>
-          <div class="flex items-center gap-4 mb-4 md:mb-6">
-            <div class="h-px w-6 md:w-8 bg-gold/65"></div>
-            <span class="font-serif text-[9px] md:text-[10px] tracking-[0.35em] md:tracking-[0.45em] uppercase text-gold/75">Our Philosophy</span>
+          <div class="gold-rule mb-8">
+            <span class="font-serif text-[9px] tracking-[0.45em] uppercase text-gold/70 shrink-0">Our Philosophy</span>
           </div>
-          <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.25] md:leading-[1.15]">
+          <h2 class="font-serif font-bold text-white leading-[1.2]" style="font-size:clamp(30px,4vw,52px)">
             重新定義<br>茶飲的精品哲學。
           </h2>
         </div>
-
-        <div class="space-y-4 md:space-y-5 text-zinc-400 font-light leading-relaxed text-sm md:text-[15px]">
-          <p>
-            「AQUA 水瓶」不僅是一間茶飲店，更是一個融合味覺與視覺美學的高階場域。以職人用心精神呈現每一杯飲品，完美呼應我們對飲品品質的極致苛求。
-          </p>
-          <p>
-            及台灣在地精品茶葉，透過現代的淬鍊手法，將每一滴「水」與「茶」昇華為杯中的藝術品。
-          </p>
+        <div class="space-y-5 text-zinc-400 font-light leading-[1.9] text-sm md:text-[15px]">
+          <p>「AQUA 水瓶」不僅是一間茶飲店，更是一個融合味覺與視覺美學的高階場域。以職人用心精神呈現每一杯飲品，完美呼應我們對飲品品質的極致苛求。</p>
+          <p>台灣在地精品茶葉，透過現代的淬鍊手法，將每一滴「水」與「茶」昇華為杯中的藝術品。</p>
         </div>
-
-        <div class="pt-4 border-t border-zinc-900">
-          <p class="font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-zinc-600 mt-4 md:mt-5">Taiwan · Est. 2020</p>
+        <div class="pt-6 border-t border-zinc-900">
+          <p class="font-serif text-[10px] tracking-[0.32em] uppercase text-zinc-700">Taiwan · Yilan · Est. 2020</p>
         </div>
       </div>
 
       <!-- Image -->
-      <div class="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-md mx-auto md:ml-auto order-1 md:order-2">
-        <div class="aspect-square overflow-hidden">
-          <img src="boss%20photo.jpg"
-               alt="AQUA 水瓶 主理人"
-               class="w-full h-full object-cover"
-               loading="lazy">
+      <div class="about-img-wrap relative order-1 md:order-2 reveal-right">
+        <div class="relative z-10 aspect-square max-w-[360px] mx-auto md:mx-0 md:ml-auto overflow-hidden">
+          <img src="boss%20photo.jpg" alt="AQUA 水瓶 主理人"
+               class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
         </div>
-        <div class="absolute -bottom-3 -right-3 md:-bottom-4 md:-right-4 w-full h-full border border-gold/15 -z-10"></div>
+
       </div>
 
     </div>
   </section>
 
-  <!-- ─── FOOTER ────────────────────────────────────────────────── -->
-  <footer id="location" class="bg-ink border-t border-zinc-900/80 pt-16 md:pt-20 pb-10 px-5 md:px-6">
+  <!-- ─── FOOTER ─── -->
+  <footer id="location" class="bg-ink border-t border-zinc-900/80 pt-20 pb-10 px-6 md:px-10">
     <div class="max-w-7xl mx-auto">
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 md:gap-12 pb-12 md:pb-16 border-b border-zinc-800/40">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-12 pb-16 border-b border-zinc-900/40 reveal">
 
-        <!-- Brand column -->
-        <div class="md:col-span-5 space-y-5 md:space-y-6 sm:col-span-2 md:sm:col-span-5">
-          <div class="flex items-baseline gap-2">
-            <span class="font-serif text-xl font-bold tracking-[0.18em] text-gold">AQUA</span>
-            <span class="text-[11px] text-zinc-700 tracking-[0.25em]">水瓶</span>
+        <!-- Brand -->
+        <div class="md:col-span-5 space-y-6 sm:col-span-2">
+          <div class="flex items-baseline gap-3">
+            <span class="font-serif text-2xl font-bold tracking-[0.2em] text-gold">AQUA</span>
+            <span class="text-[10px] text-zinc-800 tracking-[0.28em]">水瓶</span>
           </div>
-          <p class="text-zinc-500 md:text-zinc-600 text-xs md:text-sm font-light leading-relaxed max-w-xs">
+          <p class="text-zinc-400 text-xs font-light leading-[1.9] max-w-[260px]">
             品味純粹，極致淬鍊。<br>AQUA 水瓶將傳統茶道精神注入現代美學，為您打造頂級的飲茶體驗。
           </p>
-          <div class="flex gap-3 pt-1">
+          <div class="flex gap-2.5 pt-1">
             <a href="#" aria-label="Instagram"
-               class="w-8 h-8 md:w-9 md:h-9 border border-zinc-800 flex items-center justify-center text-zinc-600
-                      hover:border-gold hover:text-gold transition-colors duration-200">
-              <i data-lucide="instagram" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+               class="w-9 h-9 border border-zinc-900 flex items-center justify-center text-zinc-700
+                      hover:border-gold/50 hover:text-gold transition-all duration-200">
+              <i data-lucide="instagram" class="w-3.5 h-3.5"></i>
             </a>
             <a href="#" aria-label="Facebook"
-               class="w-8 h-8 md:w-9 md:h-9 border border-zinc-800 flex items-center justify-center text-zinc-600
-                      hover:border-gold hover:text-gold transition-colors duration-200">
-              <i data-lucide="facebook" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+               class="w-9 h-9 border border-zinc-900 flex items-center justify-center text-zinc-700
+                      hover:border-gold/50 hover:text-gold transition-all duration-200">
+              <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
             </a>
           </div>
         </div>
 
         <!-- Sitemap -->
         <div class="md:col-span-3">
-          <h4 class="font-serif text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-zinc-600 md:text-zinc-500 mb-4 md:mb-6">Sitemap</h4>
-          <ul class="space-y-3 md:space-y-4 text-xs md:text-sm font-light text-zinc-500 md:text-zinc-600">
+          <h4 class="font-serif text-[9px] tracking-[0.35em] uppercase text-zinc-500 mb-6">Sitemap</h4>
+          <ul class="space-y-4 text-xs font-light text-zinc-400">
             <li><a href="#menu"     class="hover:text-gold transition-colors duration-200">菜單 Menu</a></li>
             <li><a href="#about"    class="hover:text-gold transition-colors duration-200">品牌哲學 About</a></li>
             <li><a href="#location" class="hover:text-gold transition-colors duration-200">門市資訊 Location</a></li>
@@ -700,19 +880,19 @@
         </div>
 
         <!-- Location -->
-        <div class="md:col-span-4 sm:col-span-2 md:sm:col-span-4">
-          <h4 class="font-serif text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-zinc-600 md:text-zinc-500 mb-4 md:mb-6">門市據點</h4>
-          <ul class="space-y-4 md:space-y-5 text-xs md:text-sm font-light text-zinc-400 md:text-zinc-500">
+        <div class="md:col-span-4 sm:col-span-2">
+          <h4 class="font-serif text-[9px] tracking-[0.35em] uppercase text-zinc-500 mb-6">門市據點</h4>
+          <ul class="space-y-5 text-xs font-light text-zinc-400">
             <li class="flex items-start gap-3">
-              <i data-lucide="map-pin" class="w-3.5 h-3.5 md:w-4 md:h-4 text-gold shrink-0 mt-0.5"></i>
-              <span class="leading-relaxed">宜蘭縣頭城鎮沙成路101號<br><span class="text-[10px] md:text-xs text-zinc-600">AQUA 概念總店</span></span>
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold shrink-0 mt-0.5"></i>
+              <span class="leading-relaxed">宜蘭縣頭城鎮沙成路101號<br><span class="text-[10px] text-zinc-500">AQUA 概念總店</span></span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="phone" class="w-3.5 h-3.5 md:w-4 md:h-4 text-gold shrink-0"></i>
+              <i data-lucide="phone" class="w-3.5 h-3.5 text-gold shrink-0"></i>
               <span class="font-serif tracking-wider">03-9770047</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="clock" class="w-3.5 h-3.5 md:w-4 md:h-4 text-gold shrink-0"></i>
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-gold shrink-0"></i>
               <span class="font-serif tracking-wider">MON – SUN &nbsp; 11:00 – 21:00</span>
             </li>
           </ul>
@@ -720,84 +900,200 @@
 
       </div>
 
-      <!-- Copyright row -->
-      <div class="pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4
-                  font-serif text-[9px] md:text-[11px] tracking-widest text-zinc-700 md:text-zinc-800 uppercase text-center md:text-left">
+      <!-- Copyright -->
+      <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-3
+                  font-serif text-[9px] tracking-widest text-zinc-800 uppercase text-center">
         <p>© 2026 AQUA Premium Tea Boutique · All Rights Reserved</p>
-        <div class="flex gap-4 md:gap-6">
-          <a href="#" class="hover:text-zinc-500 transition-colors">Privacy</a>
-          <a href="#" class="hover:text-zinc-500 transition-colors">Terms</a>
+        <div class="flex gap-5">
+          <a href="#" class="hover:text-zinc-600 transition-colors">Privacy</a>
+          <a href="#" class="hover:text-zinc-600 transition-colors">Terms</a>
         </div>
       </div>
 
     </div>
   </footer>
 
-  <!-- ─── SCRIPTS ───────────────────────────────────────────────── -->
+  <!-- ─── SCRIPTS ─── -->
   <script>
     lucide.createIcons();
 
-    // Tab Filtering Logic (Optimized)
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      const drinkCards = document.querySelectorAll('.drink-card');
+    /* ── Loader ── */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('fade-out');
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // trigger hero animations
+          document.querySelectorAll('.hero-enter').forEach(el => el.classList.add('in'));
+        }, 900);
+      }, 2200);
+    });
 
-      tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          // 更新按鈕狀態
-          tabBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+    /* ── Custom Cursor ── */
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let rx = mx, ry = my;
 
-          // 取得目標分類
-          const targetCat = btn.getAttribute('data-target');
-          
-          // 過濾卡片
-          drinkCards.forEach(card => {
-            const cardCat = card.getAttribute('data-cat');
-            if (targetCat === 'all' || cardCat === targetCat) {
-              card.classList.remove('hidden-card');
-            } else {
-              card.classList.add('hidden-card');
-            }
-          });
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+    });
+
+    (function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, button, .drink-card, .amb-card').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    /* ── Hero Parallax ── */
+    const heroBg = document.getElementById('hero-bg');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      heroBg.style.transform = `translateY(${y * 0.35}px)`;
+
+      // Navbar
+      const nav = document.getElementById('navbar');
+      nav.classList.toggle('scrolled', y > 50);
+    }, { passive: true });
+
+    /* ── Scroll Reveal ── */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObs.observe(el));
+
+    /* ── Menu Tab Filter ── */
+    const tabBtns   = document.querySelectorAll('.tab-btn');
+    const drinkCards = document.querySelectorAll('.drink-card');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.dataset.target;
+        drinkCards.forEach(card => {
+          const match = target === 'all' || card.dataset.cat === target;
+          card.classList.toggle('hidden-card', !match);
         });
       });
     });
 
-    // Navbar glass on scroll
-    const navbar = document.getElementById('navbar');
-    const onScroll = () => {
-      if (window.scrollY > 40) {
-        navbar.classList.add('nav-glass', 'py-3', 'md:py-3');
-        navbar.classList.remove('py-4', 'md:py-5');
-      } else {
-        navbar.classList.remove('nav-glass', 'py-3', 'md:py-3');
-        navbar.classList.add('py-4', 'md:py-5');
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    /* ── Lightbox ── */
+    const lightbox = document.getElementById('lightbox');
+    const lbImg    = document.getElementById('lightbox-img');
+    const lbName   = document.getElementById('lightbox-name');
+    const lbEn     = document.getElementById('lightbox-en');
+    const lbPrice  = document.getElementById('lightbox-price');
+    const lbClose  = document.getElementById('lightbox-close');
 
-    // Mobile menu toggle
+    drinkCards.forEach(card => {
+      card.addEventListener('click', () => {
+        lbImg.src        = card.dataset.img;
+        lbImg.style.display = '';
+        lbImg.alt        = card.dataset.name;
+        lbName.textContent  = card.dataset.name;
+        lbEn.textContent    = card.dataset.en;
+        lbPrice.textContent = '$' + card.dataset.price;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    /* ── Mobile Menu ── */
     const mobileBtn  = document.getElementById('mobile-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    let open = false;
+    let menuOpen = false;
 
     mobileBtn.addEventListener('click', () => {
-      open = !open;
-      mobileMenu.classList.toggle('hidden', !open);
-      mobileBtn.querySelector('[data-lucide]').setAttribute('data-lucide', open ? 'x' : 'menu');
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('hidden', !menuOpen);
+      mobileBtn.querySelector('[data-lucide]').setAttribute('data-lucide', menuOpen ? 'x' : 'menu');
       lucide.createIcons();
     });
 
     document.querySelectorAll('.mobile-link').forEach(link => {
       link.addEventListener('click', () => {
-        open = false;
+        menuOpen = false;
         mobileMenu.classList.add('hidden');
         mobileBtn.querySelector('[data-lucide]').setAttribute('data-lucide', 'menu');
         lucide.createIcons();
       });
     });
-  </script>
 
+    /* ── Tweaks ── */
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "accentColor": "#fdcc2b",
+      "heroLayout": "left",
+      "showMarquee": true
+    }/*EDITMODE-END*/;
+
+    window.addEventListener('message', e => {
+      if (e.data?.type === '__activate_edit_mode') showTweaks();
+      if (e.data?.type === '__deactivate_edit_mode') hideTweaks();
+    });
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+    const tweakPanel = document.createElement('div');
+    tweakPanel.id = 'tweak-panel';
+    tweakPanel.style.cssText = `
+      position:fixed;bottom:24px;right:24px;z-index:8000;
+      background:rgba(8,8,8,0.95);border:1px solid rgba(212,175,55,0.25);
+      padding:20px 22px;min-width:230px;display:none;
+      backdrop-filter:blur(20px);font-family:'Noto Sans TC',sans-serif;
+    `;
+    tweakPanel.innerHTML = `
+      <p style="font-family:'Playfair Display',serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(212,175,55,0.8);margin-bottom:16px">Tweaks</p>
+      <label style="display:block;margin-bottom:14px">
+        <span style="font-size:11px;color:#71717a;display:block;margin-bottom:6px;letter-spacing:0.05em">主題金色</span>
+        <input type="color" id="tw-accent" value="${TWEAK_DEFAULTS.accentColor}" style="width:100%;height:32px;border:none;background:none;cursor:pointer">
+      </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span style="font-size:11px;color:#71717a;letter-spacing:0.05em">跑馬燈</span>
+        <input type="checkbox" id="tw-marquee" ${TWEAK_DEFAULTS.showMarquee ? 'checked' : ''} style="accent-color:#d4af37;width:16px;height:16px">
+      </label>
+    `;
+    document.body.appendChild(tweakPanel);
+
+    document.getElementById('tw-accent').addEventListener('input', e => {
+      const c = e.target.value;
+      document.documentElement.style.setProperty('--gold', c);
+      document.querySelectorAll('.text-gold').forEach(el => el.style.color = c);
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { accentColor: c } }, '*');
+    });
+
+    document.getElementById('tw-marquee').addEventListener('change', e => {
+      const marqueeEl = document.querySelector('.bg-gold');
+      if (marqueeEl) marqueeEl.style.display = e.target.checked ? '' : 'none';
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { showMarquee: e.target.checked } }, '*');
+    });
+
+    function showTweaks() { tweakPanel.style.display = 'block'; }
+    function hideTweaks()  { tweakPanel.style.display = 'none';  }
+  </script>
 </body>
 </html>
